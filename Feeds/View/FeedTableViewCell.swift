@@ -10,8 +10,8 @@ import UIKit
 
 class FeedTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var mediaView: UIView!
     @IBOutlet weak var mediaImageView: UIImageView!
+    @IBOutlet weak var mediaVideoView: PlayerView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -22,6 +22,12 @@ class FeedTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        mediaImageView.isHidden = false
+        mediaVideoView.isHidden = false
     }
 
 }

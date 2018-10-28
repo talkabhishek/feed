@@ -8,6 +8,8 @@
 
 import UIKit
 import SDWebImage
+import AVFoundation
+import AVKit
 
 class FeedViewController: UIViewController {
 
@@ -61,22 +63,54 @@ extension FeedViewController : UITableViewDelegate, UITableViewDataSource {
             }
             return tableView.frame.width + 110
         }
-        else {
-            return tableView.frame.width / (16/9) + 110
+        else if let url = URL(string: feed.linkurl) {
+            let asset = AVAsset(url: url)
+            let track = asset.tracks(withMediaType: .video)[0]
+            let ratio = track.naturalSize.width / track.naturalSize.height
+            return tableView.frame.width / ratio + 110
         }
+        return tableView.frame.width + 110
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FeedCell", for: indexPath) as! FeedTableViewCell
         let feed = feeds[indexPath.row]
         let url = URL(string: feed.linkurl)
         if feed.mediatype == 1 {
+            cell.mediaVideoView.isHidden = true
             cell.mediaImageView.isHidden = false
             cell.mediaImageView.sd_setImage(with: url, completed: nil)
         } else if let url = url {
             cell.mediaImageView.isHidden = true
+            cell.mediaVideoView.isHidden = false
             debugPrint(url)
+            let playerItem = CachingPlayerItem(url: url)
+            playerItem.download()
+            playerItem.delegate = self
+            let player = AVPlayer(playerItem: playerItem)
+            player.automaticallyWaitsToMinimizeStalling = false
+            cell.mediaVideoView.playerLayer.player = player
+            cell.mediaVideoView.player?.play()
         }
         return cell
+    }
+    
+}
+extension FeedViewController: CachingPlayerItemDelegate {
+    
+    func playerItem(_ playerItem: CachingPlayerItem, didFinishDownloadingData data: Data) {
+        print("File is downloaded and ready for storing")
+    }
+    
+    func playerItem(_ playerItem: CachingPlayerItem, didDownloadBytesSoFar bytesDownloaded: Int, outOf bytesExpected: Int) {
+        print("\(bytesDownloaded)/\(bytesExpected)")
+    }
+    
+    func playerItemPlaybackStalled(_ playerItem: CachingPlayerItem) {
+        print("Not enough data for playback. Probably because of the poor network. Wait a bit and try to play later.")
+    }
+    
+    func playerItem(_ playerItem: CachingPlayerItem, downloadingFailedWith error: Error) {
+        print(error)
     }
     
 }

@@ -111,13 +111,21 @@
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WNu-a1-P6E">
                                                             <rect key="frame" x="0.0" y="0.0" width="375" height="199.5"/>
                                                         </imageView>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wZ0-Ge-84U" customClass="PlayerView" customModule="Feeds" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="0.0" width="375" height="199.5"/>
+                                                            <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
+                                                        </view>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
+                                                        <constraint firstAttribute="bottom" secondItem="wZ0-Ge-84U" secondAttribute="bottom" id="OwX-fi-7zG"/>
                                                         <constraint firstItem="WNu-a1-P6E" firstAttribute="top" secondItem="XYC-vf-hU1" secondAttribute="top" id="XOa-6z-ATp"/>
                                                         <constraint firstItem="WNu-a1-P6E" firstAttribute="leading" secondItem="XYC-vf-hU1" secondAttribute="leading" id="XW2-92-Nph"/>
                                                         <constraint firstAttribute="height" priority="100" constant="200" id="YXk-bi-K5S"/>
+                                                        <constraint firstItem="wZ0-Ge-84U" firstAttribute="top" secondItem="XYC-vf-hU1" secondAttribute="top" id="e4B-cA-JoE"/>
+                                                        <constraint firstAttribute="trailing" secondItem="wZ0-Ge-84U" secondAttribute="trailing" id="l7S-XO-phB"/>
                                                         <constraint firstAttribute="trailing" secondItem="WNu-a1-P6E" secondAttribute="trailing" id="mlT-Tw-10P"/>
+                                                        <constraint firstItem="wZ0-Ge-84U" firstAttribute="leading" secondItem="XYC-vf-hU1" secondAttribute="leading" id="plh-jM-NkC"/>
                                                         <constraint firstAttribute="bottom" secondItem="WNu-a1-P6E" secondAttribute="bottom" id="sXR-BZ-MVc"/>
                                                     </constraints>
                                                 </view>
@@ -180,7 +188,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="mediaImageView" destination="WNu-a1-P6E" id="w8a-O2-Tkv"/>
-                                            <outlet property="mediaView" destination="XYC-vf-hU1" id="qvn-HU-wE7"/>
+                                            <outlet property="mediaVideoView" destination="wZ0-Ge-84U" id="nhL-Ed-due"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

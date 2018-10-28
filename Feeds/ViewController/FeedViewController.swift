@@ -49,17 +49,34 @@ extension FeedViewController : UITableViewDelegate, UITableViewDataSource {
         return feeds.count
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
+        let feed = feeds[indexPath.row]
+        if feed.mediatype == 1 {
+            if let image = SDImageCache.shared().imageFromDiskCache(forKey: feed.linkurl) {
+                let imageCrop = image.getCropRatio()
+                return tableView.frame.width / imageCrop + 110
+            }
+            else if let image = SDImageCache.shared().imageFromMemoryCache(forKey: feed.linkurl) {
+                let imageCrop = image.getCropRatio()
+                return tableView.frame.width / imageCrop + 110
+            }
+            return tableView.frame.width + 110
+        }
+        else {
+            return tableView.frame.width / (16/9) + 110
+        }
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FeedCell", for: indexPath) as! FeedTableViewCell
         let feed = feeds[indexPath.row]
+        let url = URL(string: feed.linkurl)
         if feed.mediatype == 1 {
             cell.mediaImageView.isHidden = false
-            cell.mediaImageView.sd_setImage(with: URL(string: feed.linkurl), completed: nil)
-        } else {
+            cell.mediaImageView.sd_setImage(with: url, completed: nil)
+        } else if let url = url {
             cell.mediaImageView.isHidden = true
+            debugPrint(url)
         }
         return cell
     }
+    
 }

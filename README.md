@@ -1,2 +1,2 @@
 # feed
-Feed View
+Feed View Module for app

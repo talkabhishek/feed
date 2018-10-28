@@ -15,6 +15,7 @@
 		4652ACDB2185BD60006A46CC /* jsonResponse.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4652ACDA2185BD60006A46CC /* jsonResponse.txt */; };
 		4652ACE12185C04F006A46CC /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4652ACE02185C04F006A46CC /* Feed.swift */; };
 		4652ACE32185C49D006A46CC /* FeedResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4652ACE22185C49D006A46CC /* FeedResponse.swift */; };
+		46EF7E8B2185D9A0009C5F63 /* FeedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46EF7E8A2185D9A0009C5F63 /* FeedTableViewCell.swift */; };
 		99B4491A689D665754DB8931 /* Pods_Feeds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7D382CEA6EFA68C7114CF00 /* Pods_Feeds.framework */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +31,7 @@
 		4652ACDA2185BD60006A46CC /* jsonResponse.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = jsonResponse.txt; sourceTree = "<group>"; };
 		4652ACE02185C04F006A46CC /* Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
 		4652ACE22185C49D006A46CC /* FeedResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedResponse.swift; sourceTree = "<group>"; };
+		46EF7E8A2185D9A0009C5F63 /* FeedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTableViewCell.swift; sourceTree = "<group>"; };
 		79F066F5F45ED4EB38D57A2F /* Pods-Feeds.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Feeds.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Feeds/Pods-Feeds.debug.xcconfig"; sourceTree = "<group>"; };
 		B7D382CEA6EFA68C7114CF00 /* Pods_Feeds.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Feeds.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -67,10 +69,11 @@
 		4652ACC72185B9FF006A46CC /* Feeds */ = {
 			isa = PBXGroup;
 			children = (
-				4652ACDF2185BFE1006A46CC /* Resources */,
+				4652ACDC2185BFA3006A46CC /* Model */,
+				46EF7E892185D967009C5F63 /* View */,
 				4652ACDE2185BFCF006A46CC /* ViewController */,
 				4652ACDD2185BFAC006A46CC /* UserInterface */,
-				4652ACDC2185BFA3006A46CC /* Model */,
+				4652ACDF2185BFE1006A46CC /* Resources */,
 				4652ACC82185B9FF006A46CC /* AppDelegate.swift */,
 				4652ACD42185BA02006A46CC /* Info.plist */,
 			);
@@ -110,6 +113,14 @@
 				4652ACCF2185BA02006A46CC /* Assets.xcassets */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		46EF7E892185D967009C5F63 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				46EF7E8A2185D9A0009C5F63 /* FeedTableViewCell.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		8B004BF4F62A8FA28158A569 /* Pods */ = {
@@ -246,6 +257,7 @@
 				4652ACCB2185B9FF006A46CC /* FeedViewController.swift in Sources */,
 				4652ACE12185C04F006A46CC /* Feed.swift in Sources */,
 				4652ACC92185B9FF006A46CC /* AppDelegate.swift in Sources */,
+				46EF7E8B2185D9A0009C5F63 /* FeedTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

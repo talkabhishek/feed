@@ -40,7 +40,6 @@ class FeedViewController: UIViewController {
             }
         }
     }
-
 }
 
 extension FeedViewController : UITableViewDelegate, UITableViewDataSource {
@@ -51,23 +50,28 @@ extension FeedViewController : UITableViewDelegate, UITableViewDataSource {
         return feeds.count
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let feed = feeds[indexPath.row]
-        if feed.mediatype == 1 {
-            if let image = SDImageCache.shared().imageFromDiskCache(forKey: feed.linkurl) {
-                let imageCrop = image.getCropRatio()
-                return tableView.frame.width / imageCrop + 110
-            }
-            else if let image = SDImageCache.shared().imageFromMemoryCache(forKey: feed.linkurl) {
-                let imageCrop = image.getCropRatio()
-                return tableView.frame.width / imageCrop + 110
-            }
-            return tableView.frame.width + 110
-        }
-        else if let url = URL(string: feed.linkurl) {
-            let asset = AVAsset(url: url)
-            let track = asset.tracks(withMediaType: .video)[0]
-            let ratio = track.naturalSize.width / track.naturalSize.height
+        var feed = feeds[indexPath.row]
+        if let ratio = feed.ratio {
             return tableView.frame.width / ratio + 110
+        }
+        else {
+            if feed.mediatype == 1 {
+                if let image = SDImageCache.shared().imageFromDiskCache(forKey: feed.linkurl) {
+                    let ratio = image.getCropRatio()
+                    feed.ratio = ratio
+                    feeds[indexPath.row] = feed
+                    return tableView.frame.width / ratio + 110
+                }
+                return tableView.frame.width + 110
+            }
+            else if let url = URL(string: feed.linkurl) {
+                let asset = AVAsset(url: url)
+                let track = asset.tracks(withMediaType: .video)[0]
+                let ratio = track.naturalSize.width / track.naturalSize.height
+                feed.ratio = ratio
+                feeds[indexPath.row] = feed
+                return tableView.frame.width / ratio + 110
+            }
         }
         return tableView.frame.width + 110
     }
@@ -78,39 +82,34 @@ extension FeedViewController : UITableViewDelegate, UITableViewDataSource {
         if feed.mediatype == 1 {
             cell.mediaVideoView.isHidden = true
             cell.mediaImageView.isHidden = false
-            cell.mediaImageView.sd_setImage(with: url, completed: nil)
+            if let image = SDImageCache.shared().imageFromDiskCache(forKey: feed.linkurl) {
+                cell.mediaImageView.image = image
+            }
+            else {
+                cell.mediaImageView.sd_setImage(with: url) { (image, error, type, imgUrl) in
+                    tableView.reloadRows(at: [indexPath], with: .automatic)
+                }
+            }
         } else if let url = url {
             cell.mediaImageView.isHidden = true
             cell.mediaVideoView.isHidden = false
-            debugPrint(url)
-            let playerItem = CachingPlayerItem(url: url)
-            playerItem.download()
-            playerItem.delegate = self
-            let player = AVPlayer(playerItem: playerItem)
-            player.automaticallyWaitsToMinimizeStalling = false
-            cell.mediaVideoView.playerLayer.player = player
-            cell.mediaVideoView.player?.play()
+            DispatchQueue.main.async {
+                let playerItem = CachingPlayerItem(url: url)
+                let player = AVPlayer(playerItem: playerItem)
+                player.automaticallyWaitsToMinimizeStalling = false
+                cell.mediaVideoView.playerLayer.player = player
+                cell.mediaVideoView.player?.play()
+            }
         }
         return cell
     }
     
-}
-extension FeedViewController: CachingPlayerItemDelegate {
-    
-    func playerItem(_ playerItem: CachingPlayerItem, didFinishDownloadingData data: Data) {
-        print("File is downloaded and ready for storing")
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let feedCell = cell as? FeedTableViewCell else { return }
+        let feed = feeds[indexPath.row]
+        if feed.mediatype == 2 {
+            feedCell.mediaVideoView.player?.pause()
+            feedCell.mediaVideoView.playerLayer.player?.pause()
+        }
     }
-    
-    func playerItem(_ playerItem: CachingPlayerItem, didDownloadBytesSoFar bytesDownloaded: Int, outOf bytesExpected: Int) {
-        print("\(bytesDownloaded)/\(bytesExpected)")
-    }
-    
-    func playerItemPlaybackStalled(_ playerItem: CachingPlayerItem) {
-        print("Not enough data for playback. Probably because of the poor network. Wait a bit and try to play later.")
-    }
-    
-    func playerItem(_ playerItem: CachingPlayerItem, downloadingFailedWith error: Error) {
-        print(error)
-    }
-    
 }

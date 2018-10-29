@@ -7,8 +7,10 @@
 //
 
 import Foundation
+import UIKit
 
 struct Feed : Codable {
     let mediatype: Int
     let linkurl: String
+    var ratio: CGFloat?
 }

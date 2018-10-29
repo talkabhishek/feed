@@ -98,7 +98,7 @@ extension FeedViewController : UITableViewDelegate, UITableViewDataSource {
                 cell.mediaImageView.image = image
             }
             else {
-                cell.mediaImageView.sd_setImage(with: url) { (image, error, type, imgUrl) in
+                cell.mediaImageView.sd_setImage(with: url, placeholderImage: UIImage(named: "placeholder"), options: .continueInBackground) { (_, _, _, _) in
                     tableView.reloadRows(at: [indexPath], with: .automatic)
                 }
             }

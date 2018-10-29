@@ -33,7 +33,19 @@ class FeedViewController: UIViewController {
                 let decoder = JSONDecoder()
                 let feedResponse = try decoder.decode(FeedResponse.self, from: data)
                 debugPrint(feedResponse.resource.count)
-                feeds = feedResponse.resource
+                for feed in feedResponse.resource {
+                    if feed.mediatype == 2, let url = URL(string: feed.linkurl) {
+                        let asset = AVAsset(url: url)
+                        let track = asset.tracks(withMediaType: .video)[0]
+                        let ratio = track.naturalSize.width / track.naturalSize.height
+                        var f = feed
+                        f.ratio = ratio
+                        feeds.append(f)
+                    }
+                    else {
+                        feeds.append(feed)
+                    }
+                }
                 feedTableView.reloadData()
             } catch let err {
                 debugPrint(err)
@@ -97,6 +109,7 @@ extension FeedViewController : UITableViewDelegate, UITableViewDataSource {
                 let playerItem = CachingPlayerItem(url: url)
                 let player = AVPlayer(playerItem: playerItem)
                 player.automaticallyWaitsToMinimizeStalling = false
+                player.volume = 0
                 cell.mediaVideoView.playerLayer.player = player
                 cell.mediaVideoView.player?.play()
             }
